@@ -50,7 +50,7 @@ def alarm_thread_function(time_until: int):
     return 0
 
 def alarm(la: int) -> int:
-    """pOS Alarm System"""
+    """Py-Shell Alarm System"""
     printp("\u001b[7m-A-L-A-R-M-\u001b[0m\u001b[33;1m\n", la)
     
     time_until = ""
@@ -71,7 +71,7 @@ def alarm(la: int) -> int:
     return 0
 
 def binary(la: int) -> int:
-    """pOS Bit Manipulator"""
+    """Py-Shell Bit Manipulator"""
     printp("\u001b[7m-B-I-N-A-R-Y-\u001b[0m\u001b[33;1m\n", la)
     num = ""
     while not is_int(num):
@@ -125,7 +125,7 @@ def binary(la: int) -> int:
     return 1
 
 def calculator(la: int) -> int:
-    """pOS Calculator"""
+    """Py-Shell Calculator"""
     printp("\u001b[7m-C-A-L-C-U-L-A-T-O-R-\u001b[0m\u001b[33;1m\n", la)
     num = ""
     while not is_float(num):
@@ -172,7 +172,7 @@ def calculator(la: int) -> int:
     return 1
 
 def fete(la: int) -> int:
-    """pOS File Explorer and Text Editor."""
+    """Py-Shell File Explorer and Text Editor."""
     try:
         printp("\u001b[7m-F-I-L-E-E-X-P-L-O-R-E-R-&-T-E-X-T-E-D-I-T-O-R-\u001b[0m\u001b[33;1m\n", la)
         while True:
@@ -279,7 +279,7 @@ def fete(la: int) -> int:
         pass
 
 def help(cmds, la: int) -> int:
-    """pOS Help Menu"""
+    """Py-Shell Help Menu"""
     printp("\u001b[7m-H-E-L-P-\u001b[0m\u001b[33;1m\n", la)
     try:
         if cmds[1] == "alarm":
@@ -351,7 +351,7 @@ def help(cmds, la: int) -> int:
     except Exception:
         pass
     
-    printp("pOS : Little experimental operating system.\n\n", la)
+    printp("Py-Shell : Little experimental operating system.\n\n", la)
     
     printp("alarm; [minutes]*opt : Lets you set an alarm that goes off after a set time.\n", la)
     printp("binary : Lets you do bitwise operations on a number in binary.\n", la)
@@ -359,7 +359,7 @@ def help(cmds, la: int) -> int:
     printp("cls : Clears the screen.\n", la)
     printp("exit : Exits the current layer, if in the highest layer, it will quit the program.\n", la)
     printp("fete : File Explorer and Text Editor.\n", la)
-    printp("help; [cmd] : Gives you a list of things you can do using [cmd], if [cmd] is blank, it prints help about pOS.\n", la)
+    printp("help; [cmd] : Gives you a list of things you can do using [cmd], if [cmd] is blank, it prints help about Py-Shell.\n", la)
     
     printp("List of Valid [cmd]s:\n", la + 1)
     printp("\"alarm\"\n", la + 1)
