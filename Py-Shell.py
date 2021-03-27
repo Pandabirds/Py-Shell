@@ -2,11 +2,16 @@ import os
 import time
 from datetime import datetime
 import winsound
+from playsound import playsound
 import threading
+import multiprocessing
 import shutil
-os.system("cls")
+
+playsound_process_array = []
+# ^ Creating the global array, so two if statements can access it.
 
 if __name__ == "__main__":
+    os.system("cls")
     # v These are ANSI color codes, this one makes all the text bright yellow.
     print("\u001b[33;1m")
     print("Py-Shell [Experimental]")
@@ -171,20 +176,21 @@ def calculator(la: int) -> int:
     printp("\u001b[7m-C-A-L-C-U-L-A-T-O-R-\u001b[0m\u001b[33;1m\n", la)
     return 1
 
-def fete(la: int) -> int:
-    """Py-Shell File Explorer and Text Editor."""
+def multife(la: int) -> int:
+    """Py-Shell Multi-Purpose File Explorer."""
     try:
-        printp("\u001b[7m-F-I-L-E-E-X-P-L-O-R-E-R-&-T-E-X-T-E-D-I-T-O-R-\u001b[0m\u001b[33;1m\n", la)
+        printp("\u001b[7m-M-U-L-T-I-P-U-R-P-O-S-E-F-I-L-E-E-X-P-L-O-R-E-R-\u001b[0m\u001b[33;1m\n", la)
         while True:
+            global playsound_process_array
             current_path = os.getcwd()
             current_directory = os.listdir()
             printp(current_path + ":: ", la)
             cmds = input().lower().split("; ")
             if cmds[0] == "exit":
-                printp("\u001b[7m-F-I-L-E-E-X-P-L-O-R-E-R-&-T-E-X-T-E-D-I-T-O-R-\u001b[0m\u001b[33;1m\n", la)
+                printp("\u001b[7m-M-U-L-T-I-P-U-R-P-O-S-E-F-I-L-E-E-X-P-L-O-R-E-R-\u001b[0m\u001b[33;1m\n", la)
                 return 0
             if cmds[0] == "quit":
-                printp("\u001b[7m-F-I-L-E-E-X-P-L-O-R-E-R-&-T-E-X-T-E-D-I-T-O-R-\u001b[0m\u001b[33;1m\n", la)
+                printp("\u001b[7m-M-U-L-T-I-P-U-R-P-O-S-E-F-I-L-E-E-X-P-L-O-R-E-R-\u001b[0m\u001b[33;1m\n", la)
                 print("\u001b[0m")
                 quit(0)
             if cmds[0] == "chdir" or cmds[0] == "cd":
@@ -243,6 +249,10 @@ def fete(la: int) -> int:
 
                     if (not os.path.exists(current_path + "\\" + cmds[2])) and os.path.exists(cmds[2]):
                         shutil.move(current_path + "\\" + cmds[1], cmds[2])
+            if (cmds[0] == "playsound" or cmds[0] == "playaudio") and os.path.exists(cmds[1]) and os.path.isfile(cmds[1]):
+                playsound_process_array.append(multiprocessing.Process(target=playsound, args=(cmds[1],)))
+                playsound_process_array[-1].daemon = True
+                playsound_process_array[-1].start()
             if cmds[0] == "read" and os.path.isfile(current_path + "\\" + cmds[1]) and os.path.exists(current_path + "\\" + cmds[1]):
                 with open(cmds[1], "r") as target_file:
                     printp(f"CONTENTS OF {cmds[1]}:\n", la)
@@ -272,9 +282,11 @@ def fete(la: int) -> int:
                 if os.path.getsize(current_path + "\\" + cmds[1]) <= 0:
                     with open(cmds[1], "w") as target_file_write:
                         target_file_write.writelines(cmds[3])
-            
+            if cmds[0] == "stopsound" or cmds[0] == "stopaudio":
+                    for playsound_process in playsound_process_array:
+                        playsound_process.terminate()
         return 0
-        printp("\u001b[7m-F-I-L-E-E-X-P-L-O-R-E-R-&-T-E-X-T-E-D-I-T-O-R-\u001b[0m\u001b[33;1m\n", la)
+        printp("\u001b[7m-M-U-L-T-I-P-U-R-P-O-S-E-F-I-L-E-E-X-P-L-O-R-E-R-\u001b[0m\u001b[33;1m\n", la)
     except Exception:
         pass
 
@@ -329,13 +341,15 @@ def help(cmds, la: int) -> int:
             
             return 0
         
-        if cmds[1] == "fete" or cmds[1] == "file" or cmds[1] == "files":
-            printp("FETE : File Explorer and Text Editor.\n\n", la)
+        if cmds[1] == "multife" or cmds[1] == "file" or cmds[1] == "files":
+            printp("MULTIFE : Multi-Purpose File Explorer.\n\n", la)
             
             printp("cd; [path]; [dir] : Changes the current directory to: A. [dir] itself, B. A folder named [dir] in the current directory, or C. If [dir] is \"..\", the parent directory of the current one.\n", la)
             printp("dir; [path] : Lists all the files and folders in the current directory.\n", la)
+            printp("playsound; [path or file] : Plays the sound file located at [path] or if the file is in the current directory, with the name of [file].\n", la)
             printp("read; [name] : Reads a file in the current directory.\n", la)
-            printp("run; [name] : Runs [name].py file in the current directory.\n", la)
+            printp("run; [name] : Runs [name].py file in the current directory, requires Python to be installed.\n", la)
+            printp("stopsound : stops ALL sounds played via the playsound command.\n", la)
             printp("write; [name]; [line]; [text] : Replaces line [line] in file [name] with [text].\n", la)
         
         return 0
@@ -365,12 +379,12 @@ def help(cmds, la: int) -> int:
     printp("\"alarm\"\n", la + 1)
     printp("-\"binary\"\n", la + 1)
     printp("-\"calculator\"\n", la + 1)
-    printp("-\"fete\"\n", la + 1)
+    printp("-\"multife\"\n", la + 1)
     printp("-\"syntax\"\n", la + 1)
     
     printp("time : Gives the current time.\n", la)
     printp("quit : Quits the program, no matter what layer you are in.\n", la)
-    printp("python : Starts Python by inputting the command \"python\" in your console. (Requires python installed)\n", la)
+    printp("python : Starts Python by inputting the command \"python\" in your console (requires python installed).\n", la)
     
     printp("\u001b[7m-H-E-L-P-\u001b[0m\u001b[33;1m\n", la)
     return 0
@@ -419,8 +433,8 @@ if __name__ == "__main__":
                 calculator(1)
         if commands[0] == "clear" or commands[0] == "cls" or commands[0] == "clear screen":
             os.system("cls")
-        if commands[0] == "fete" or commands[0] == "file" or commands[0] == "files":
-            fete(1)
+        if commands[0] == "multife" or commands[0] == "file" or commands[0] == "files":
+            multife(1)
         if commands[0] == "help":
             help(commands, 1)
         if commands[0] == "python":
