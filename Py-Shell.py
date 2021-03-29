@@ -252,6 +252,11 @@ def help(cmds, la: int) -> int:
             
             return 0
         
+        if cmds[1] == "notes":
+            printp("Note 1. Py-Shell is best used in Python, however, it will require downloading of modules to use in Python, all of these can be installed via pip.\n", la)
+            printp("Note 2. Py-Shell can be activated via commandprompt easily by going to C:\\[username]\\ and typing \"py-shell\" if Py-Shell.bat is installed (which should happen automatically).\n", la)
+        return 0
+
         if cmds[1] == "multife" or cmds[1] == "file" or cmds[1] == "files":
             printp("MULTIFE : Multi-Purpose File Explorer.\n\n", la)
             
@@ -292,6 +297,7 @@ def help(cmds, la: int) -> int:
     printp("\"alarm\"\n", la + 1)
     printp("-\"binary\"\n", la + 1)
     printp("-\"calculator\"\n", la + 1)
+    printp("-\"notes\"\n", la + 1)
     printp("-\"multife\"\n", la + 1)
     printp("-\"syntax\"\n", la + 1)
     
@@ -447,6 +453,16 @@ def multife(la: int) -> int:
         pass
 
 if __name__ == "__main__":
+    if not os.path.exists(os.path.expanduser("~") + "\\" + "Py-Shell.bat"):
+        print("Installing Py-Shell.bat File")
+        if __file__.endswith(".py"):
+            with open(os.path.expanduser("~") + "\\" + "Py-Shell.bat", "w") as f:
+                f.write("@echo off\n")
+                f.write(f"python -u {__file__}")
+        if __file__.endswith(".exe"):
+            with open(os.path.expanduser("~") + "\\" + "Py-Shell.bat", "w") as f:
+                f.write("@echo off\n")
+                f.write(__file__)
     while True:
         print("::: ", end = "")
         commands = input().lower().split("; ")
