@@ -1,18 +1,47 @@
-import os
-import math
-import time
-from datetime import datetime
-import winsound
-import platform
-from playsound import playsound
-import threading
-import multiprocessing
-import shutil
-import wmi
-import signal
-import decimal
-import urllib.request
-from bs4 import BeautifulSoup
+import os # multife, etc
+import decimal # Calculator, accurate floats
+if __name__ == "__main__":
+    os.system("cls")
+    print("\u001b[33;1m")
+    print("Importing Modules")
+def load_percent(num: int, den: int):
+    print(f"[{(decimal.Decimal(num) / decimal.Decimal(den)) * 100}%]", end = "\r")
+import math # Calculator
+load_percent(3, 20)
+import time # Time
+load_percent(4, 20)
+from datetime import datetime # Time
+load_percent(5, 20)
+import winsound # Alarm
+load_percent(6, 20)
+import platform # Uname
+load_percent(7, 20)
+from playsound import playsound # Multife Sound Player
+load_percent(8, 20)
+import threading # Alarm, etc
+load_percent(9, 20)
+import multiprocessing # Sound Player, etc
+load_percent(10, 20)
+import shutil # Copy, remove directory, move
+load_percent(11, 20)
+import wmi # Processes
+load_percent(12, 20)
+import signal # Kill Process
+load_percent(13, 20)
+import urllib.request # URL commands
+load_percent(14, 20)
+from bs4 import BeautifulSoup # u2t
+load_percent(15, 20)
+import webbrowser # u2w
+load_percent(16, 20)
+import sys # ? sys.executable
+load_percent(17, 20)
+import googlesearch # google
+load_percent(18, 20)
+import socket # IP
+load_percent(19, 20)
+import wikipedia # wikipedia
+load_percent(20, 20)
 
 #TODO: Add color changing and saving via edited config file.
 #TODO: Add installation process to add config file.
@@ -21,11 +50,7 @@ playsound_process_array = []
 # ^ Creating the global array, so two if statements can access it.
 error_logs = ["Log Start"]
 
-if __name__ == "__main__":
-    os.system("cls")
-    # v These are ANSI color codes, this one makes all the text bright yellow.
-    print("\u001b[33;1m")
-    print("Py-Shell [Experimental]")
+
 
 def indexists(list_input, index: int) -> bool:
     """Returns a boolean based off of whether or not the inputted [index] exists in [list_input]."""
@@ -76,7 +101,7 @@ def alarm(la: int) -> int:
         if time_until == "quit":
             printp("\u001b[7m-A-L-A-R-M-\u001b[0m\u001b[33;1m\n", la)
             print("\u001b[0m")
-            quit(0)
+            sys.exit(0)
         if time_until == "exit":
             printp("\u001b[7m-A-L-A-R-M-\u001b[0m\u001b[33;1m\n", la)
             return 0
@@ -96,7 +121,7 @@ def binary(la: int) -> int:
         if num == "quit":
             printp("\u001b[7m-A-L-A-R-M-\u001b[0m\u001b[33;1m\n", la)
             print("\u001b[0m")
-            quit(0)
+            sys.exit(0)
         if num == "exit":
             printp("\u001b[7m-A-L-A-R-M-\u001b[0m\u001b[33;1m\n", la)
             return 0
@@ -112,7 +137,7 @@ def binary(la: int) -> int:
             if cmds[0] == "quit":
                 printp("\u001b[7m-B-I-N-A-R-Y-\u001b[0m\u001b[33;1m\n", la)
                 print("\u001b[0m")
-                quit(0)
+                sys.exit(0)
             if cmds[0] == "not":
                 num = ~num
             if cmds[0] == "get":
@@ -152,7 +177,7 @@ def calculator(la: int) -> int:
         if num == "quit":
             printp("\u001b[7m-A-L-A-R-M-\u001b[0m\u001b[33;1m\n", la)
             print("\u001b[0m")
-            quit()
+            sys.exit(0)
         if num == "exit":
             printp("\u001b[7m-A-L-A-R-M-\u001b[0m\u001b[33;1m\n", la)
             return 0
@@ -167,14 +192,18 @@ def calculator(la: int) -> int:
         if cmds[0] == "quit":
             printp("\u001b[7m-C-A-L-C-U-L-A-T-O-R-\u001b[0m\u001b[33;1m\n", la)
             print("\u001b[0m")
-            quit(0)
+            sys.exit(0)
         try:
             if cmds[0] == "add":
                 num += decimal.Decimal(cmds[1])
             if cmds[0] == "cos":
-                num = math.cos(num)
+                num = decimal.decimal(math.cos(num))
             if cmds[0] == "div" and cmds[1] != "0":
                 num /= decimal.Decimal(cmds[1])
+            if cmds[0] == "inv":
+                num = 1/num
+            if cmds[0] == "nrt":
+                num **= (1 / decimal.Decimal(cmds[1]))
             if cmds[0] == "mod" and cmds[1] != "0":
                 num = num % decimal.Decimal(cmds[1])
             if cmds[0] == "mul":
@@ -182,13 +211,17 @@ def calculator(la: int) -> int:
             if cmds[0] == "pow":
                 num **= decimal.Decimal(cmds[1])
             if cmds[0] == "sin":
-                num = math.sin(num)
+                num = decimal.decimal(math.sin(num))
             if cmds[0] == "set":
                 num = decimal.Decimal(cmds[1])
+            if cmds[0] == "sqr":
+                num = decimal.Decimal(num ** 2)
+            if cmds[0] == "sqt":
+                num = decimal.Decimal(math.sqrt(num))
             if cmds[0] == "sub":
                 num -= decimal.Decimal(cmds[1])
             if cmds[0] == "tan":
-                num = math.tan(num)
+                num = decimal.decimal(math.tan(num))
         except Exception as e:
             global error_logs
             error_logs.append(f"\n{time.time()}:\n{str(e)}\n")
@@ -232,11 +265,15 @@ def help(cmds, la: int) -> int:
             printp("add; [n] : Adds [n] to the current number.\n", la)
             printp("cos : Sets the current number to the cosine of the current number.\n", la)
             printp("div; [n] : Divides the current number by [n].\n", la)
+            printp("inv : Sets the current number to one divided by the current number.\n", la)
+            printp("nrt; [n] : Sets the current number to the [n]th root of the current number.\n", la)
             printp("mod; [n] : Sets the current number to the current number modulus [n].\n", la)
             printp("mul; [n] : Multiplies the current number by [n].\n",la)
             printp("pow; [n] : Sets the current number to be the current number to the power of [n].\n")
             printp("sin : Sets the current number to the sine of the current number.\n", la)
             printp("set; [n] : Sets the current number to [n].\n", la)
+            printp("sqr : Sets the current number to the current number squared.\n", la)
+            printp("sqt : Sets the current number to the square root of the current number.\n", la)
             printp("sub; [n] : Subtracts [n] from the current number.\n", la)
             printp("tan : Sets the current number to the tangent of the current number.\n", la)
             
@@ -264,7 +301,9 @@ def help(cmds, la: int) -> int:
             printp("dir; [path] : Lists all the files and folders in the current directory.\n", la)
             printp("playsound; [path or file] : Plays the sound file located at [path] or if the file is in the current directory, with the name of [file].\n", la)
             printp("read; [name] : Reads a file in the current directory.\n", la)
+            printp("rename; [file]; [new name] : Renames [file] in the current directory to [new name].\n", la)
             printp("run; [name] : Runs [name].py file in the current directory, requires Python to be installed.\n", la)
+            printp("runexe; [name] : Runs [name].exe file in the current directory.\n", la)
             printp("stopsound : stops ALL sounds played via the playsound command.\n", la)
             printp("write; [name]; [line]; [text] : Replaces line [line] in file [name] with [text].\n", la)
         
@@ -286,11 +325,20 @@ def help(cmds, la: int) -> int:
     
     printp("Py-Shell : Little experimental operating system.\n\n", la)
     
+    #a
     printp("alarm; [minutes]*opt : Lets you set an alarm that goes off for five seconds after a set time.\n", la)
+    #b
     printp("binary : Lets you do bitwise operations on a number in binary.\n", la)
+    #c
     printp("calculator; [n1]*opt; [o]*opt; [n2]*opt : Basic calculator for basic operations.\n", la)
     printp("cls : Clears the screen.\n", la)
+    #d
+    #e
     printp("exit : Exits the current layer, if in the highest layer, it will quit the program.\n", la)
+    #f
+    #g
+    printp("google; [search] : Searches google for [search] and returns the first one hundred results.\n", la)
+    #h
     printp("help; [cmd] : Gives you a list of things you can do using [cmd], if [cmd] is blank, it prints help about Py-Shell.\n", la)
     
     printp("List of Valid [cmd]s:\n", la + 1)
@@ -300,18 +348,39 @@ def help(cmds, la: int) -> int:
     printp("-\"notes\"\n", la + 1)
     printp("-\"multife\"\n", la + 1)
     printp("-\"syntax\"\n", la + 1)
-    
+    #i
+    #j
+    #k
+    printp("killprocess; [id]: Kills a process on your machine with [id].\n", la)
+    #l
     printp("logs : Shows the error logs.\n", la)
+    #m
     printp("multife : Multi-Purpose File Explorer.\n", la)
+    #n
+    #o
+    #p
+    printp("processes : Prints a list of the processes running on your machine and their id.\n", la)
     printp("python : Starts Python by inputting the command \"python\" in your console (requires python installed).\n", la)
     if __file__.endswith(".py"):
         printp("source : Prints the source code of the shell, if the Python version is being used.\n", la)
+    #q
+    printp("quit : Quits the program, regardless of what layer you are in.\n", la)
+    #r
+    #s
+    #t
     printp("time : Prints the current time.\n", la)
+    #u
     printp("uname; [attribute]*opt : Prints a collection of information about your device. If [attribute] is set, it will print that attribute of your device (if it exists).\n", la)
     printp("url2html; [url] : Prints the HTML tags of the website at [url].\n", la)
-    printp("url2text; [ur]; [n]*opt : Prints the first [n] texts at the website at [url]. If [n] is not set, it will print them all.\n", la)
-    printp("quit : Quits the program, no matter what layer you are in.\n", la)
-    
+    printp("url2text; [url]; [n]*opt : Prints the first [n] texts at the website at [url]. If [n] is not set, it will print them all.\n", la)
+    printp("url2web; [url] : Opens [url] in a new tab, or if no browser is open, it will open your default browser.\n", la)
+    #v
+    #w
+    printp("wikipedia; [article]; [sentences]*opt : Prints [sentences] sentences of a summary of the Wikipedia article about [article].\n", la)
+    printp("wikipediasearch; [term] : Prints the search results for a term on Wikipedia, this can help you find an article.\n", la)
+    #x
+    #y
+    #z
     printp("\u001b[7m-H-E-L-P-\u001b[0m\u001b[33;1m\n", la)
     return 0
 
@@ -331,7 +400,7 @@ def multife(la: int) -> int:
             if cmds[0] == "quit":
                 printp("\u001b[7m-M-U-L-T-I-P-U-R-P-O-S-E-F-I-L-E-E-X-P-L-O-R-E-R-\u001b[0m\u001b[33;1m\n", la)
                 print("\u001b[0m")
-                quit(0)
+                sys.exit(0)
             if cmds[0] == "chdir" or cmds[0] == "cd":
                 if cmds[1] == "..":
                     os.chdir(os.path.join(current_path, os.pardir))
@@ -407,6 +476,10 @@ def multife(la: int) -> int:
                         output += content
                         print(output, end = "")
                     print("\n")
+            if cmds[0] == "rename":
+                if cmds[1].endswith("Py-Shell.py") or cmds[1].endswith("Py-Shell.exe"):
+                    printp("It is not recommended to rename Py-Shell files.\n", la)
+                os.rename(cmds[1], cmds[2])
             if cmds[0] == "run":
                 if os.path.exists(current_path + "\\" + cmds[1]):
                     os.system("python -u " + current_path + "\\" + cmds[1])
@@ -418,7 +491,7 @@ def multife(la: int) -> int:
                 if os.path.exists(cmds[1]):
                     os.system(cmds[1])
             if cmds[0] == "write":
-                if cmds[1] == "Py-Shell.py" or cmds[1] == __file__:
+                if cmds[1].endswith("Py-Shell.py") or cmds[1].endswith("Py-Shell.exe"):
                     printp("*It is advised not to edit the source code of Py-Shell.\n", la)
                 if os.path.isfile(current_path + "\\" + cmds[1]) and os.path.exists(current_path + "\\" + cmds[1]):
                     if os.path.getsize(current_path + "\\" + cmds[1]) > 0:
@@ -453,23 +526,37 @@ def multife(la: int) -> int:
         pass
 
 if __name__ == "__main__":
-    if not os.path.exists(os.path.expanduser("~") + "\\" + "Py-Shell.bat"):
-        print("Installing Py-Shell.bat File")
-        if __file__.endswith(".py"):
-            with open(os.path.expanduser("~") + "\\" + "Py-Shell.bat", "w") as f:
-                f.write("@echo off\n")
-                f.write(f"python -u {__file__}")
-        if __file__.endswith(".exe"):
-            with open(os.path.expanduser("~") + "\\" + "Py-Shell.bat", "w") as f:
-                f.write("@echo off\n")
-                f.write(__file__)
+    print("Verifying Py-Shellexe.bat File")
+    with open(os.path.expanduser("~") + "\\" + "Py-Shellexe.bat", "w") as f:
+        f.write("@echo off\n")
+        f.write(sys.executable)
+    print("Verifying Py-Shell.bat File")
+    with open(os.path.expanduser("~") + "\\" + "Py-Shell.bat", "w") as f:
+        f.write("@echo off\n")
+        f.write(f"python -u {__file__}")
+    print("Note: Don't use the batch script to start a version of Py-Shell that was not the last version you used.")
+    if not os.path.exists(os.path.expanduser("~") + "\\" + "Py-Shell-Data"):
+        print("Creating Py-Shell-Data")
+        os.mkdir(os.path.expanduser("~") + "\\" + "Py-Shell-Data")
+        with open(os.path.expanduser("~") + "\\" + "Py-Shell-Data\\statistics", "w") as f:
+            f.write("1") # Times Py-Shell opened.
+    if os.path.exists(os.path.expanduser("~") + "\\" + "Py-Shell-Data"):
+        pass
+        #increment 1
+    with open(os.path.expanduser("~") + "\\" + "Py-Shell-Data\\statistics", "r") as f:
+        print("Reading Information from Py-Shell-Data")
+        booted_up = f.readline()
+    os.system("cls")
+    # v These are ANSI color codes, this one makes all the text bright yellow.
+    print("\u001b[33;1m")
+    print("Py-Shell [Experimental]")
     while True:
         print("::: ", end = "")
         commands = input().lower().split("; ")
         
         if commands[0] == "exit" or commands[0] == "quit":
             print("\u001b[0m")
-            quit(0)
+            sys.exit(0)
         if commands[0] == "alarm":
             error_logs.append(f"\n{time.time()}:\nUsed alarm\n")
             if indexists(commands, 1):
@@ -511,6 +598,15 @@ if __name__ == "__main__":
         if commands[0] == "clear" or commands[0] == "cls" or commands[0] == "clear screen":
             error_logs.append(f"\n{time.time()}:\nCleared Screen\n")
             os.system("cls")
+        if commands[0] == "google" or commands[0] == "googlesearch":
+            for result in googlesearch.search(commands[1], num_results=100):
+                printp(str(result) + "\n", 1)
+        if commands[0] == "help":
+            error_logs.append(f"\n{time.time()}:\nEntered help\n")
+            help(commands, 1)
+        if commands[0] == "ip":
+            IP = socket.gethostbyname(socket.gethostname())
+            printp(str(IP) + "\n", 1)
         if commands[0] == "killprocess":
             error_logs.append(f"\n{time.time()}:\nKilled Process {commands[1]}\n")
             try:
@@ -518,9 +614,6 @@ if __name__ == "__main__":
             except Exception as e:
                 error_logs.append(f"\n{time.time()}:\n{str(e)}\n")
                 pass
-        if commands[0] == "help":
-            error_logs.append(f"\n{time.time()}:\nEntered help\n")
-            help(commands, 1)
         if commands[0] == "logs":
             for log in error_logs:
                 printp(str(log) + "\n", 1)
@@ -580,6 +673,39 @@ if __name__ == "__main__":
                     print(list(soup.stripped_strings)[:int(commands[2])])
                 if not indexists(commands, 2):
                     print(list(soup.stripped_strings))
+            except Exception as e:
+                error_logs.append(f"\n{time.time()}:\n{str(e)}\n")
+                pass
+        if commands[0] == "u2w" or commands[0] == "urltoweb" or commands[0] == "url2web":
+            try:
+                webbrowser.open_new_tab(commands[1])
+            except Exception as e:
+                error_logs.append(f"\n{time.time()}:\n{str(e)}\n")
+                pass
+        if commands[0] == "wikipedia":
+            try:
+                if indexists(commands, 1):
+                    if indexists(commands, 2):
+                        #print("\u001b[1m")
+                        printp(f"First {commands[2]} sentences of the Wikipedia Summary for \"{commands[1]}\"\n\n", 1)
+                        #print("\u001b[0m\u001b[33;1m")
+                        for line in wikipedia.summary(commands[1], sentences=int(commands[2])).split("\n"):
+                            printp(line + "\n", 1)
+                    if not indexists(commands, 2):
+                        printp(f"Wikipedia Summary for \"{commands[1]}\"\n\n", 1)
+                        for line in wikipedia.summary(commands[1]).split("\n"):
+                            printp(line + "\n", 1)
+            except Exception as e:
+                error_logs.append(f"\n{time.time()}:\n{str(e)}\n")
+                pass
+        if commands[0] == "wikipediasearch":
+            try:
+                if indexists(commands, 1):
+                    #print("\u001b[1m")
+                    printp(f"Wikipedia Search Results for \"{commands[1]}\"\n\n", 1)
+                    #print("\u001b[0m\u001b[33;1m")
+                    for result in wikipedia.search(commands[1]):
+                        printp(result + "\n", 1)
             except Exception as e:
                 error_logs.append(f"\n{time.time()}:\n{str(e)}\n")
                 pass
