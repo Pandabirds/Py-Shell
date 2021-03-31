@@ -38,7 +38,7 @@ import sys # ? sys.executable
 load_percent(17, 20)
 import googlesearch # google
 load_percent(18, 20)
-import socket # IP
+import socket # IP and p2p
 load_percent(19, 20)
 import wikipedia # wikipedia
 load_percent(20, 20)
@@ -50,7 +50,57 @@ playsound_process_array = []
 # ^ Creating the global array, so two if statements can access it.
 error_logs = ["Log Start"]
 
+p2p_enabled = False
 
+def connect(conn):
+    global p2p_enabled
+    try:
+        while True:
+            if not p2p_enabled:
+                return 0
+            received = conn.recv(1024)
+            if received ==' ':
+                pass
+            else:
+                print(str(conn.getsockname()[0]) + ": " + received.decode())
+    except ConnectionResetError as e:
+        error_logs.append(f"\n{time.time()}:\n{str(e)}\n")
+        p2p_enabled = False
+
+def send_msg(conn):
+    global p2p_enabled
+    try:
+        while True:
+            if not p2p_enabled:
+                return 0
+            send_msg = input()[0:].encode("utf-8")
+            if send_msg == '':
+                pass
+            if send_msg.decode() == "exit":
+                p2p_enabled = False
+            if send_msg.decode() == "quit":
+                p2p_enabled = False
+                sys.exit(0)
+            else:
+                conn.sendall(send_msg)
+    except ConnectionResetError as e:
+        error_logs.append(f"\n{time.time()}:\n{str(e)}\n")
+        print("Client Disconnected")
+        p2p_enabled = False
+
+def thread_receiver(PORT_LISTEN: int):
+    #receiver
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+    s.bind(('', int(PORT_LISTEN)))
+    s.listen()
+    (conn, addr) = s.accept() 
+    #receiver
+    
+    thread1 = threading.Thread(target = connect, args = ([conn]))
+    thread1.start()
+    thread1.join()
+    return 0
 
 def indexists(list_input, index: int) -> bool:
     """Returns a boolean based off of whether or not the inputted [index] exists in [list_input]."""
@@ -161,7 +211,6 @@ def binary(la: int) -> int:
         except Exception as e:
             global error_logs
             error_logs.append(f"\n{time.time()}:\n{str(e)}\n")
-            pass
 
         
     printp("\u001b[7m-B-I-N-A-R-Y-\u001b[0m\u001b[33;1m\n", la)
@@ -225,7 +274,6 @@ def calculator(la: int) -> int:
         except Exception as e:
             global error_logs
             error_logs.append(f"\n{time.time()}:\n{str(e)}\n")
-            pass
     
     printp("\u001b[7m-C-A-L-C-U-L-A-T-O-R-\u001b[0m\u001b[33;1m\n", la)
     return 1
@@ -321,7 +369,6 @@ def help(cmds, la: int) -> int:
     except Exception as e:
         global error_logs
         error_logs.append(f"\n{time.time()}:\n{str(e)}\n")
-        pass
     
     printp("Py-Shell : Little experimental operating system.\n\n", la)
     
@@ -523,7 +570,39 @@ def multife(la: int) -> int:
     except Exception as e:
         global error_logs
         error_logs.append(f"\n{time.time()}:\n{str(e)}\n")
-        pass
+def p2p(la: int):
+    printp("Note: p2p is highly experimental, was not originally made for Py-Shell and is not recommended for use.\n", la)
+    global error_logs
+    IP = input("Enter IP: ")
+    PORT_TARGET = ""
+    PORT_LISTEN = ""
+    while True:
+        try:
+            PORT_TARGET = int(input("Enter Target Port (10,000-50,000) (Standard: 3773): "))
+            PORT_LISTEN = int(input("Enter Listen Port (10,000-50,000) (Standard: 7337): "))
+        except Exception as e:
+            error_logs.append(f"\n{time.time()}:\n{str(e)}\n")
+            continue
+        break
+
+    while True:
+        try:
+            thread_receiver_thread = threading.Thread(target=thread_receiver, args = ([PORT_LISTEN]))
+            thread_receiver_thread.start()
+            
+            # transmitter
+            s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+            s.connect((IP, int(PORT_TARGET)))
+            # transmitter
+            
+            thread2 = threading.Thread(target = send_msg, args = ([s]))
+            thread2.start()
+            thread2.join()
+            return 0
+        except Exception as e:
+            error_logs.append(f"\n{time.time()}:\n{str(e)}\n")
+            continue
 
 if __name__ == "__main__":
     print("Verifying Py-Shellexe.bat File")
@@ -566,7 +645,6 @@ if __name__ == "__main__":
                     printp("Alarm Set.\n", 0)
                 except Exception as e:
                     error_logs.append(f"\n{time.time()}:\n{str(e)}\n")
-                    pass
             if not indexists(commands, 1):
                 error_logs.append(f"\n{time.time()}:\nEntered alarm\n")
                 alarm(1)
@@ -592,7 +670,6 @@ if __name__ == "__main__":
                     printp(f"{commands[1]} {commands[2]} {commands[3]} = {output}\n", 1)
                 except Exception as e:
                     error_logs.append(f"\n{time.time()}:\n{str(e)}\n")
-                    pass
             if not indexists(commands, 1):
                 calculator(1)
         if commands[0] == "clear" or commands[0] == "cls" or commands[0] == "clear screen":
@@ -613,7 +690,6 @@ if __name__ == "__main__":
                 os.kill(int(commands[1]), signal.SIGTERM)
             except Exception as e:
                 error_logs.append(f"\n{time.time()}:\n{str(e)}\n")
-                pass
         if commands[0] == "logs":
             for log in error_logs:
                 printp(str(log) + "\n", 1)
@@ -621,6 +697,9 @@ if __name__ == "__main__":
         if commands[0] == "multife" or commands[0] == "file" or commands[0] == "files":
             error_logs.append(f"\n{time.time()}:\nEntered multife\n")
             multife(1)
+        if commands[0] == "p2p":
+            p2p_enabled = True
+            p2p(1)
         if commands[0] == "processes":
             error_logs.append(f"\n{time.time()}:\nChecked Processes\n")
             store = wmi.WMI()
@@ -649,7 +728,6 @@ if __name__ == "__main__":
                     printp(f"{getattr(information, commands[1])}\n", 1)
                 except Exception as e:
                     error_logs.append(f"\n{time.time()}:\n{str(e)}\n")
-                    pass
             if not indexists(commands, 1):
                 printp(f"System: {information.system}\n", 1)
                 printp(f"Network Name: {information.node}\n", 1)
@@ -661,7 +739,6 @@ if __name__ == "__main__":
                 print(urllib.request.urlopen(commands[1]).read())
             except Exception as e:
                 error_logs.append(f"\n{time.time()}:\n{str(e)}\n")
-                pass
         if commands[0] == "u2t" or commands[0] == "urltotext" or commands[0] == "url2text":
             try:
                 soup = BeautifulSoup(urllib.request.urlopen(commands[1]).read(), "html.parser")
@@ -675,13 +752,11 @@ if __name__ == "__main__":
                     print(list(soup.stripped_strings))
             except Exception as e:
                 error_logs.append(f"\n{time.time()}:\n{str(e)}\n")
-                pass
         if commands[0] == "u2w" or commands[0] == "urltoweb" or commands[0] == "url2web":
             try:
                 webbrowser.open_new_tab(commands[1])
             except Exception as e:
                 error_logs.append(f"\n{time.time()}:\n{str(e)}\n")
-                pass
         if commands[0] == "wikipedia":
             try:
                 if indexists(commands, 1):
@@ -697,7 +772,6 @@ if __name__ == "__main__":
                             printp(line + "\n", 1)
             except Exception as e:
                 error_logs.append(f"\n{time.time()}:\n{str(e)}\n")
-                pass
         if commands[0] == "wikipediasearch":
             try:
                 if indexists(commands, 1):
@@ -708,4 +782,3 @@ if __name__ == "__main__":
                         printp(result + "\n", 1)
             except Exception as e:
                 error_logs.append(f"\n{time.time()}:\n{str(e)}\n")
-                pass
