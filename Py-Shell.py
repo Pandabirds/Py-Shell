@@ -370,7 +370,7 @@ def help(cmds, la: int) -> int:
         global error_logs
         error_logs.append(f"\n{time.time()}:\n{str(e)}\n")
     
-    printp("Py-Shell : Little experimental operating system.\n\n", la)
+    printp("Py-Shell : Little experimental operating shell.\n\n", la)
     
     #a
     printp("alarm; [minutes]*opt : Lets you set an alarm that goes off for five seconds after a set time.\n", la)
@@ -406,6 +406,7 @@ def help(cmds, la: int) -> int:
     #n
     #o
     #p
+    printp("p2p : Starts p2p. Note: Very experimental and not recommended.\n", la)
     printp("processes : Prints a list of the processes running on your machine and their id.\n", la)
     printp("python : Starts Python by inputting the command \"python\" in your console (requires python installed).\n", la)
     if __file__.endswith(".py"):
@@ -423,7 +424,7 @@ def help(cmds, la: int) -> int:
     printp("url2web; [url] : Opens [url] in a new tab, or if no browser is open, it will open your default browser.\n", la)
     #v
     #w
-    printp("wikipedia; [article]; [sentences]*opt : Prints [sentences] sentences of a summary of the Wikipedia article about [article].\n", la)
+    printp("wikipedia; [article]; [sentences]*opt : Prints [sentences] sentences of a summary of the Wikipedia article about [article]. If [sentences] is left empty, it prints out the entire summary.\n", la)
     printp("wikipediasearch; [term] : Prints the search results for a term on Wikipedia, this can help you find an article.\n", la)
     #x
     #y
@@ -620,8 +621,10 @@ if __name__ == "__main__":
         with open(os.path.expanduser("~") + "\\" + "Py-Shell-Data\\statistics", "w") as f:
             f.write("1") # Times Py-Shell opened.
     if os.path.exists(os.path.expanduser("~") + "\\" + "Py-Shell-Data"):
-        pass
-        #increment 1
+        with open(os.path.expanduser("~") + "\\" + "Py-Shell-Data\\statistics", "r") as f:
+            current_num = int(f.read())
+        with open(os.path.expanduser("~") + "\\" + "Py-Shell-Data\\statistics", "w") as f:
+            f.write(str(current_num + 1))
     with open(os.path.expanduser("~") + "\\" + "Py-Shell-Data\\statistics", "r") as f:
         print("Reading Information from Py-Shell-Data")
         booted_up = f.readline()
